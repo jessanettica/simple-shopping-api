@@ -1,4 +1,4 @@
-Sections:
+## Sections:
 
 * How to run the project on your computer
 * Possible Issues
@@ -9,7 +9,7 @@ Sections:
     * View a user's order history
 * Further Improvements
 
-**Installation/How to run the Project**
+## Installation/How to run the project on your computer
 
 Step 1) Check that you are at the level that contains the env/ directory (the same level that also has this README file) and activate the virtual env by running:
     `source env/bin/activate`
@@ -60,7 +60,7 @@ Step 5) It's simpler to just use the curl commands, but you can also interact wi
 using the Django Rest interface. Just go to `http://localhost:8000/` ( or the port your development server is running on) in your browser. You'll need to login. The username is `admin` and the password is `password123`. The endpoints
 to use the interface are below in the API section after each curl command.
 
-**Other possible issues**
+## Other possible issues
 
 1) You are getting an error that says `'ImportError: No module named django.core.management`':
     That means you don't have django installed. Check by running `python -c "import django; print(django.get_version())`
@@ -80,13 +80,13 @@ Those 2 dependencies are all you need.
   * go here: github.com/pypa/pip/issues/3165
 
 
-**API**
+## API
 
 You can interact with the API either using curl commands in the terminal or the
 Django Rest Framework interface. Both included in each section, but using
 curl commands is simpler and faster.
 
-*Adding an item to the cart*
+### Adding an item to the cart
 
 Curl
 
@@ -132,7 +132,7 @@ Get to the directory with manage.py file and then run `./manage.py shell`
 <QuerySet [(u'tshirt', 2)]>
 ```
 
-*Removing an item from the cart*
+### Removing an item from the cart
 
 Using Terminal
 
@@ -166,7 +166,7 @@ Get to the directory with manage.py file and then run `./manage.py shell`
 <QuerySet [(u'tshirt', 1)]>
 ```
 
-*Making a purchase*
+### Making a purchase
 
 Using Terminal
 
@@ -208,7 +208,7 @@ Get to the directory with manage.py file and then run `./manage.py shell`
 ```
 Cart should be empty after creating an Order.
 
-*View a user's order history*
+### View a user's order history
 
 Using Terminal
 
@@ -236,7 +236,7 @@ Get to the directory with manage.py file and then run `./manage.py shell`
 <QuerySet [<Order: Order object>]>
 ```
 
-**Further Improvements**
+## Further Improvements
 
     * Consistency on deletion versus disassociation. Right now if the quantity of the product to remove from the cart is 1 the cart item is deleted. But when an order is created and the cart is emptied, the cart items are not deleted, just disassociated from the cart. That means
     for example, that insights can be gained from cart items that were previously in a customer's cart. If that's a use case then they should potentially not be deleted when removed from the cart.
