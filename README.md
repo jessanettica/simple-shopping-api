@@ -2,6 +2,7 @@
 
 * How to run the project on your computer
 * Possible Issues
+* Main files
 * API
     * Adding an item to the cart
     * Removing an item from the cart
@@ -79,6 +80,9 @@ Those 2 dependencies are all you need.
 4) `Six` issue when installing packages
   * go here: github.com/pypa/pip/issues/3165
 
+## Main Files
+* ecommercesite/shop/views.py
+* ecommercesite/shop/serializers.py
 
 ## API
 
@@ -176,7 +180,8 @@ To check things in the shell go to the directory with manage.py file and then ru
 
 Using Terminal
 
-endpoint is `/orders/` and you have to send the purchaser id (the user id of the customer making the purchase/order). An Order is created with the contents of the user's cart.
+endpoint is `/orders/` and you have to send the purchaser id (the user id of the customer making the purchase/order).
+An Order is created with the contents of the user's cart.
 
 Try this:
 
@@ -245,8 +250,11 @@ To check things in the shell go to the directory with manage.py file and then ru
 
 ## Further Improvements
 
-    * Consistency on deletion versus disassociation. Right now if the quantity of the product to remove from the cart is 1 the cart item is deleted. But when an order is created and the cart is emptied, the cart items are not deleted, just disassociated from the cart. That means
-    for example, that insights can be gained from cart items that were previously in a customer's cart. If that's a use case then they should potentially not be deleted when removed from the cart.
+    * Consistency on deletion versus disassociation. Right now if the quantity of the product to remove from
+    the cart is 1 the cart item is deleted. But when an order is created and the cart is emptied, the cart 
+    items are not deleted, just disassociated from the cart. That meansfor example, that insights can be 
+    gained from cart items that were previously in a customer's cart. If that's a use case then they should 
+    potentially not be deleted when removed from the cart.
 
     * Some of the logic in the API views should be decomped to model methods.
 
