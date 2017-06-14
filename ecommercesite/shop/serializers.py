@@ -22,11 +22,13 @@ class CartSerializer(serializers.ModelSerializer):
     """Serializer for the Cart model."""
 
     customer = UserSerializer(read_only=True)
+    # used to represent the target of the relationship using it's __unicode__ method
+    items = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = Cart
         fields = (
-            'id', 'customer', 'created_at', 'updated_at'
+            'id', 'customer', 'created_at', 'updated_at', 'items'
         )
 
 class CartItemSerializer(serializers.ModelSerializer):
@@ -67,11 +69,14 @@ class OrderSerializer(serializers.ModelSerializer):
 
     customer = UserSerializer(read_only=True, required=False)
     purchaser = PurchaserIdField(read_only=True)
+    # used to represent the target of the relationship using it's __unicode__ method
+    order_items = serializers.StringRelatedField(many=True, required=False)
+
 
     class Meta:
         model = Order
         fields = (
-            'id', 'customer', 'purchaser', 'total', 'created_at', 'updated_at'
+            'id', 'customer', 'purchaser', 'total', 'created_at', 'updated_at', 'order_items'
         )
 
     def create(self, validated_data):

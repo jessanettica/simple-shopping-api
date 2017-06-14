@@ -39,6 +39,9 @@ class CartItem(models.Model):
     )
     quantity = models.PositiveIntegerField(default=1, null=True, blank=True)
 
+    def __unicode__(self):
+        return '%s: %s' % (self.product.title, self.quantity)
+
 class Order(models.Model):
     """
     An Order is the more permanent counterpart of the shopping cart. It represents
@@ -69,3 +72,6 @@ class OrderItem(models.Model):
         on_delete=models.CASCADE
     )
     quantity = models.PositiveIntegerField(null=True, blank=True)
+
+    def __unicode__(self):
+        return '%s: %s' % (self.product.title, self.quantity)
