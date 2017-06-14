@@ -66,7 +66,7 @@ class CartViewSet(viewsets.ModelViewSet):
             return Response({'status': 'fail'})
 
         # Disallow adding to cart if available inventory is not enough
-        if product.available_inventory <= 0 or product.available_inventory - quantity <= 0:
+        if product.available_inventory <= 0 or product.available_inventory - quantity < 0:
             print "There is no more product available"
             return Response({'status': 'fail'})
 
