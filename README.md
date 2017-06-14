@@ -1,7 +1,8 @@
-Sections:
+## Sections:
 
 * How to run the project on your computer
 * Possible Issues
+* Main files
 * API
     * Adding an item to the cart
     * Removing an item from the cart
@@ -9,7 +10,7 @@ Sections:
     * View a user's order history
 * Further Improvements
 
-**Installation/How to run the Project**
+## Installation/How to run the project on your computer
 
 Step 1) Check that you are at the level that contains the env/ directory (the same level that also has this README file) and activate the virtual env by running:
     `source env/bin/activate`
@@ -60,7 +61,7 @@ Step 5) It's simpler to just use the curl commands, but you can also interact wi
 using the Django Rest interface. Just go to `http://localhost:8000/` ( or the port your development server is running on) in your browser. You'll need to login. The username is `admin` and the password is `password123`. The endpoints
 to use the interface are below in the API section after each curl command.
 
-**Other possible issues**
+## Other possible issues
 
 1) You are getting an error that says `'ImportError: No module named django.core.management`':
     That means you don't have django installed. Check by running `python -c "import django; print(django.get_version())`
@@ -79,17 +80,20 @@ Those 2 dependencies are all you need.
 4) `Six` issue when installing packages
   * go here: github.com/pypa/pip/issues/3165
 
+## Main Files
+* ecommercesite/shop/views.py
+* ecommercesite/shop/serializers.py
 
-**API**
+## API
 
 You can interact with the API either using curl commands in the terminal or the
 Django Rest Framework interface. Both included in each section, but using
 curl commands is simpler and faster.
 
-*Adding an item to the cart*
+### Adding an item to the cart
 
-Curl
-
+ - available_inventory must be > 0
+ 
 Using Terminal
 
 Keep the server running and on another tab use the curl command.
@@ -102,7 +106,6 @@ Try this:
 curl -X PUT http://127.0.0.1:8000/carts/1/add_to_cart/ -d "product_id=1&quantity=2" -H 'Accept: application/json; indent=4' -u admin:password123
 
 ```
-
 Using Django Rest Interface
 
 First login (username = `admin` password = `password123`) then go to:
@@ -112,8 +115,11 @@ First login (username = `admin` password = `password123`) then go to:
 If you scroll to the bottom you will see a section to make a PUT request.
 In the content section add `{"product_id":1, "quantity"=2}` and hit the PUT button.
 
-The response will be the serialized cart, but it won't display the nested cart
-items. This was a decision when implementing the serializers and deciding on which to display the reverse relationship. Seeing the serialized cart means the request was successful otherwise
+Note: The response will be the serialized cart, but it won't display the nested cart
+items. This was a decision when implementing the serializers and deciding on which to display the reverse relationship:
+![Add To Cart](https://user-images.githubusercontent.com/8107962/26965406-7c22a252-4caa-11e7-9fac-79e5d82daa14.png)
+
+Seeing the serialized cart means the request was successful otherwise
 you'll see
 ```
 {
@@ -122,7 +128,7 @@ you'll see
 ```
 
 To check things in the shell
-Get to the directory with manage.py file and then run `./manage.py shell`
+go to the directory with manage.py file and then run `./manage.py shell`
 ```
 >>> from shop.models import *
 >>> u = User.objects.get(id=1)
@@ -132,7 +138,7 @@ Get to the directory with manage.py file and then run `./manage.py shell`
 <QuerySet [(u'tshirt', 2)]>
 ```
 
-*Removing an item from the cart*
+### Removing an item from the cart
 
 Using Terminal
 
@@ -157,8 +163,7 @@ In the content section add `{"product_id":1}` and hit the PUT button.
 Same as adding to the cart, removing from it the response will be the serialized cart, but it won't display the nested cart items because of how the relationship was handled in the
 serializers.
 
-To check things in the shell
-Get to the directory with manage.py file and then run `./manage.py shell`
+To check things in the shell go to the directory with manage.py file and then run `./manage.py shell`
 ```
 >>> from shop.models import *
 >>> u = User.objects.get(id=1)
@@ -166,11 +171,17 @@ Get to the directory with manage.py file and then run `./manage.py shell`
 <QuerySet [(u'tshirt', 1)]>
 ```
 
-*Making a purchase*
+### Making a purchase
+
+- available_inventory decrements by the appropriate amount
+- purchases don't happen that would make available_inventory dip below 0:
+
+![No More Inventory](https://user-images.githubusercontent.com/8107962/26965409-7c93009c-4caa-11e7-84c6-7bb5c64d1997.png)
 
 Using Terminal
 
-endpoint is `/orders/` and you have to send the purchaser id (the user id of the customer making the purchase/order). An Order is created with the contents of the user's cart.
+endpoint is `/orders/` and you have to send the purchaser id (the user id of the customer making the purchase/order).
+An Order is created with the contents of the user's cart.
 
 Try this:
 
@@ -178,6 +189,7 @@ Try this:
 curl -X POST -H "Content-Type:application/json; indent=4" -d '{"purchaser":1}' -u admin:password123 http://127.0.0.1:8000/orders/
 
 ```
+![Order Created](https://user-images.githubusercontent.com/8107962/26965407-7c249102-4caa-11e7-94fb-b487d0381daf.png)
 
 Using Django Rest Interface
 
@@ -194,8 +206,7 @@ In the content section add:
 ```
 Then hit the POST button.
 
-To check things in the shell
-Get to the directory with manage.py file and then run `./manage.py shell`
+To check things in the shell go to the directory with manage.py file and then run `./manage.py shell`
 ```
 >>> from shop.models import *
 >>> u = User.objects.get(id=1)
@@ -208,7 +219,7 @@ Get to the directory with manage.py file and then run `./manage.py shell`
 ```
 Cart should be empty after creating an Order.
 
-*View a user's order history*
+### View a user's order history
 
 Using Terminal
 
@@ -225,10 +236,11 @@ Using Django Rest Interface
 
 `http://localhost:8000/orders/order_history/?user_id=1`
 
-You'll see the json for all of the user's orders.
+You'll see the json for all of the user's orders:
+![User Orger History](https://user-images.githubusercontent.com/8107962/26965408-7c2891d0-4caa-11e7-89b6-e4b721d1f6d1.png)
 
-To check things in the shell
-Get to the directory with manage.py file and then run `./manage.py shell`
+
+To check things in the shell go to the directory with manage.py file and then run `./manage.py shell`
 ```
 >>> from shop.models import *
 >>> u = User.objects.get(id=1)
@@ -236,10 +248,13 @@ Get to the directory with manage.py file and then run `./manage.py shell`
 <QuerySet [<Order: Order object>]>
 ```
 
-**Further Improvements**
+## Further Improvements
 
-    * Consistency on deletion versus disassociation. Right now if the quantity of the product to remove from the cart is 1 the cart item is deleted. But when an order is created and the cart is emptied, the cart items are not deleted, just disassociated from the cart. That means
-    for example, that insights can be gained from cart items that were previously in a customer's cart. If that's a use case then they should potentially not be deleted when removed from the cart.
+    * Consistency on deletion versus disassociation. Right now if the quantity of the product to remove from
+    the cart is 1 the cart item is deleted. But when an order is created and the cart is emptied, the cart 
+    items are not deleted, just disassociated from the cart. That meansfor example, that insights can be 
+    gained from cart items that were previously in a customer's cart. If that's a use case then they should 
+    potentially not be deleted when removed from the cart.
 
     * Some of the logic in the API views should be decomped to model methods.
 
