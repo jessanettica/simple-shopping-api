@@ -165,9 +165,8 @@ class OrderViewSet(viewsets.ModelViewSet):
             Serialized representation of Order we are creating.
 
         """
-
         try:
-            purchaser_id = self.request.data['purchaser']
+            purchaser_id = self.request.data['customer']
             user = User.objects.get(pk=purchaser_id)
         except:
             raise serializers.ValidationError(
@@ -185,8 +184,8 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         # find the order total using the quantity of each cart item and the product's price
         total_aggregated_dict = cart.items.aggregate(total=Sum(F('quantity')*F('product__price'),output_field=FloatField()))
-        order_total = round(total_aggregated_dict['total'], 2)
 
+        order_total = round(total_aggregated_dict['total'], 2)
         order = serializer.save(customer=user, total=order_total)
 
         order_items = []
@@ -217,8 +216,8 @@ class OrderViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-    @list_route()
-    def order_history(self, request):
+    @list_route(url_path="order_history/(?P<customer_id>[0-9])")
+    def order_history(self, request, customer_id):
         """Return a list of a user's orders.
 
         Parameters
@@ -226,10 +225,8 @@ class OrderViewSet(viewsets.ModelViewSet):
         request: request
 
         """
-        user_id = request.GET.get('user_id', 0)
-
         try:
-            user = User.objects.get(id=user_id)
+            user = User.objects.get(id=customer_id)
 
         except:
             # no user was found, so order history cannot be retrieved.
@@ -239,7 +236,6 @@ class OrderViewSet(viewsets.ModelViewSet):
         serializer = OrderSerializer(orders, many=True)
 
         return Response(serializer.data)
-
 
 
 class OrderItemViewSet(viewsets.ModelViewSet):
