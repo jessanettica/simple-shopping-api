@@ -119,6 +119,9 @@ Note: The response will be the serialized cart, but it won't display the nested 
 items. This was a decision when implementing the serializers and deciding on which to display the reverse relationship:
 ![Add To Cart](https://user-images.githubusercontent.com/8107962/26965406-7c22a252-4caa-11e7-9fac-79e5d82daa14.png)
 
+UPDATED Serialized cart now DOES display the nested cart items:
+![Add To Cart](https://user-images.githubusercontent.com/8107962/27342359-cf0e801a-5594-11e7-89cc-39ea82282162.png)
+
 Seeing the serialized cart means the request was successful otherwise
 you'll see
 ```
