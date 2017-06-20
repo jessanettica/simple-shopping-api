@@ -22,7 +22,7 @@ class CartSerializer(serializers.ModelSerializer):
     """Serializer for the Cart model."""
 
     customer = UserSerializer(read_only=True)
-    # used to represent the target of the relationship using it's __unicode__ method
+    # used to represent the target of the relationship using its __unicode__ method
     items = serializers.StringRelatedField(many=True)
 
     class Meta:
@@ -45,38 +45,18 @@ class CartItemSerializer(serializers.ModelSerializer):
         )
 
 
-class PurchaserIdField(serializers.Field):
-
-    """Read only field used on the order serializer."""
-
-    def to_representation(self, source):
-        """Serialize.
-
-        The source is determined by the field name used when using this
-        field definition.
-
-        Parameters
-        ----------
-        source: int
-
-        """
-        return source
-
-
 class OrderSerializer(serializers.ModelSerializer):
 
     """Serializer for the Order model."""
 
-    customer = UserSerializer(read_only=True, required=False)
-    purchaser = PurchaserIdField(read_only=True)
-    # used to represent the target of the relationship using it's __unicode__ method
+    customer = UserSerializer(read_only=True)
+    # used to represent the target of the relationship using its __unicode__ method
     order_items = serializers.StringRelatedField(many=True, required=False)
-
 
     class Meta:
         model = Order
         fields = (
-            'id', 'customer', 'purchaser', 'total', 'created_at', 'updated_at', 'order_items'
+            'id', 'customer', 'total', 'created_at', 'updated_at', 'order_items'
         )
 
     def create(self, validated_data):
